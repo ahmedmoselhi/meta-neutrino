@@ -34,7 +34,7 @@ DEPENDS += " \
 	zlib \
 "
 
-RDEPENDS_${PN} = "streamripper"
+RDEPENDS_${PN} = "streamripper virtual/libstb-hal lua luaposix lua-expat ffmpeg"
 
 S = "${WORKDIR}/git"
 
@@ -63,11 +63,13 @@ EXTRA_OECONF = " \
 	--with-tremor \
 	--enable-flac \
 	--enable-ffmpegdec \
+	--enable-lua \
 	--with-target=native \
 	--prefix=${N_PREFIX} \
 	--exec_prefix=${N_EXEC_PREFIX} \
 	--includedir=${N_PREFIX}/include \
 	--with-configdir=/etc/neutrino/config \
+	--with-controldir_var=/etc/neutrino/config \
 	--with-plugindir=/usr/share/tuxbox/neutrino/plugins \
         --with-plugindir_var=/etc/neutrino/plugins \
 	--with-webtvdir=/usr/share/tuxbox/neutrino/plugins/webtv \
@@ -88,16 +90,17 @@ EXTRA_OECONF = " \
 	--disable-weather-key-manage \
 "
 
+EXTRA_OEMAKE += "'ARFLAGS=rc'"
+
 VERSION_FILE = "${N_PREFIX}/.version"
 
-N_CFLAGS = "-Wall -Wextra -Wshadow -g -O2 -fno-strict-aliasing -rdynamic -DENABLE_FREESATEPG -DNEW_LIBCURL \
+N_CFLAGS = "-Wall -Wextra -Wshadow -Wno-psabi -g -O2 -fno-strict-aliasing -rdynamic -DENABLE_FREESATEPG -DNEW_LIBCURL \
 -I${S}/lib/libcoolstream2 -I${STAGING_INCDIR}/freetype2 -I${STAGING_INCDIR}/sigc++-2.0 -I${STAGING_INCDIR}/glib-2.0 -I${STAGING_LIBDIR}/glib-2.0/include"
 
 N_CXXFLAGS = "${N_CFLAGS}"
 
 N_LDFLAGS += "-Wl,--hash-style=gnu -Wl,-rpath-link, ${STAGING_LIBDIR} -lcurl -ldl -lass"
 N_CPPFLAGS = "-DDYNAMIC_LUAPOSIX -D__KERNEL_STRICT_NAMES -D__STDC_CONSTANT_MACROS"
-
 CPPFLAGS = "${N_CPPFLAGS}"
 
 do_configure_prepend() {
@@ -136,6 +139,7 @@ do_install_prepend () {
 		echo "${IMAGE_LOCATION} ${RELEASE_STATE}${DISTRO_VERSION_NUMBER_MAJOR}${DISTRO_VERSION_NUMBER_MINOR}${DISTRO_VERSION_NUMBER_MICRO}`date +%Y%m%d%H%M` MD5 ${HASH} ${DISTRO_VERSION}" > ${RELEASE_TEXT_LOCATION_HOST}
 	fi
 	echo "distro=yocto ${FLAVOUR}" > ${D}${sysconfdir}/image-version
+	echo "machine=${MACHINE}" >> ${D}${sysconfdir}/image-version
 	echo "imageversion=${DISTRO_VERSION_NUMBER_MAJOR}.${DISTRO_VERSION_NUMBER_MINOR}.${DISTRO_VERSION_NUMBER_MICRO}" >> ${D}${sysconfdir}/image-version
 	touch ${D}/usr/bin/enigma2
 }
@@ -147,7 +151,11 @@ do_install_append() {
 		echo "${RELEASE_TEXT_LOCATION}" > ${D}/etc/update.urls
 	fi
 	cp -rf ${WORKDIR}/etc ${D}
-	install -m 644 ${WORKDIR}/update.jpg ${D}${datadir}/tuxbox/neutrino/icons
+	install -m 644 ${WORKDIR}/update_download.jpg ${D}${datadir}/tuxbox/neutrino/icons
+	install -m 644 ${WORKDIR}/update_decompress.jpg ${D}${datadir}/tuxbox/neutrino/icons
+	install -m 644 ${WORKDIR}/update_kernel.jpg ${D}${datadir}/tuxbox/neutrino/icons
+	install -m 644 ${WORKDIR}/update_rootfs.jpg ${D}${datadir}/tuxbox/neutrino/icons
+	install -m 644 ${WORKDIR}/update_done.jpg ${D}${datadir}/tuxbox/neutrino/icons
 }
 
 FILES_${PN} += "\

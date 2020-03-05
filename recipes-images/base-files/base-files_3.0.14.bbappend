@@ -47,8 +47,8 @@ do_custom_baseissueinstall() {
 do_install_append () {
 	install -d ${D}${localstatedir}/update ${D}${systemd_unitdir}/system/multi-user.target.wants ${D}${bindir} ${D}${sysconfdir}/systemd/system/multi-user.target.wants
 	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
-  		install -d ${D}${systemd_unitdir}/system ${D}${sysconfdir}/modules-load.d
-  		install -m 0644 ${WORKDIR}/gbox.service ${D}${systemd_unitdir}/system
+		install -d ${D}${systemd_unitdir}/system ${D}${sysconfdir}/modules-load.d
+		install -m 0644 ${WORKDIR}/gbox.service ${D}${systemd_unitdir}/system
                 install -m 0644 ${WORKDIR}/cccam.service ${D}${systemd_unitdir}/system
 		install -m 0755 ${WORKDIR}/local_cam.sh ${D}${bindir}
                 install -m 0644 ${WORKDIR}/locale.conf  ${D}${sysconfdir}

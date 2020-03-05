@@ -7,7 +7,7 @@ DEPENDS = "libusb1 openssl pcsc-lite"
 
 DEPENDS_APPEND_libc-uclibc += "virtual/libstb-hal"
 
-SRC_URI = "svn://www.streamboard.tv/svn/oscam;protocol=http;module=trunk;scmdata=keep \
+SRC_URI = "git://github.com/Schimmelreiter/oscam-smod.git;protocol=https \
            file://oscam.service \
            file://oscam.conf \
 "
@@ -15,8 +15,7 @@ SRC_URI = "svn://www.streamboard.tv/svn/oscam;protocol=http;module=trunk;scmdata
 SRCREV = "${AUTOREV}"
 PV = "${SRCPV}"
 
-S = "${WORKDIR}/trunk"
-B = "${S}"
+S = "${WORKDIR}/git"
 
 INHIBIT_PACKAGE_STRIP = "1"
 
@@ -25,31 +24,31 @@ inherit cmake systemd
 SYSTEMD_SERVICE_${PN} = "oscam.service"
 
 EXTRA_OECMAKE = " \
-                 -DCS_SVN_VERSION="${SRCPV}" \
-                 -DDEFAULT_CS_CONFDIR="/etc/neutrino/config" \
-                 -DWEBIF=1 \
-                 -DLCDSUPPORT=1 \
-                 -DUSE_LIBCRYPTO=1 \
-                 -DUSE_LIBUSB=1 \
-                 -DUSE_STAPI=0 \
-                 -DREADER_IRDETO=1 \
-                 -DREADER_NAGRA=1 \
-                 -DREADER_SECA=1 \
-                 -DREADER_CRYPTOWORKS=1 \
-                 -DREADER_CONAX=1 \
-                 -DREADER_VIACCESS=1 \
-                 -DREADER_VIDEOGUARD=1 \
-                 -DMODULE_CAMD35=1 \
-                 -DMODULE_GBOX=1 \
-                 -DMODULE_CCCAM=1 \
-                 -DMODULE_CCCSHARE=1 \
-                 -DCARDREADER_SC8IN1=1 \
-                 -DCARDREADER_SMARGO=1 \
-                 -DWITH_SSL=1 \
-                 -DHAVE_PCSC=1 \
-"
-
-EXTRA_OECMAKE_append_hd51 += "-DOSCAM_SYSTEM_NAME=tuxbox \
+	-DOSCAM_SYSTEM_NAME=tuxbox \
+	-DCS_SVN_VERSION="${SRCPV}" \
+	-DDEFAULT_CS_CONFDIR="/etc/neutrino/config" \
+	-DWEBIF=1 \
+	-DLCDSUPPORT=1 \
+	-DUSE_LIBCRYPTO=1 \
+	-DUSE_LIBUSB=1 \
+	-DUSE_STAPI=0 \
+	-DREADER_IRDETO=1 \
+	-DREADER_NAGRA=1 \
+	-DREADER_SECA=1 \
+	-DREADER_CRYPTOWORKS=1 \
+	-DREADER_CONAX=1 \
+	-DREADER_VIACCESS=1 \
+	-DREADER_VIDEOGUARD=1 \
+	-DMODULE_CAMD35=1 \
+	-DMODULE_GBOX=1 \
+	-DMODULE_CCCAM=1 \
+	-DMODULE_CCCSHARE=1 \
+	-DCARDREADER_SC8IN1=1 \
+	-DCARDREADER_SMARGO=1 \
+	-DWITH_SSL=1 \
+	-DWITH_NEUTRINO=1 \                
+	-DHAVE_PCSC=1 \
+	-DWITH_EMU=0 \
 "
 
 do_install () {

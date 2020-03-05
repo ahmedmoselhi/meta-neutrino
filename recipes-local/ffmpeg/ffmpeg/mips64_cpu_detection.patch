@@ -1,3 +1,8 @@
+From f8efca98c64cb7c54071ac0cef42dfb70b901982 Mon Sep 17 00:00:00 2001
+From: Markus Volk <f_l_k@t-online.de>
+Date: Fri, 17 Aug 2018 13:53:02 +0200
+Subject: [PATCH] initial commit
+
 It will add -mips64r6 and -mips64r2 to cmdline which will
 cause conflicts
 
@@ -13,11 +18,15 @@ failed to merge target specific data of file
 -Khem
 Upstream-Status: Inappropriate [OE-Specific]
 
-Index: ffmpeg-3.1.1/configure
-===================================================================
---- ffmpeg-3.1.1.orig/configure
-+++ ffmpeg-3.1.1/configure
-@@ -5220,12 +5220,9 @@ elif enabled mips; then
+---
+ configure | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/configure b/configure
+index a9644e2..aab4bd2 100755
+--- a/configure
++++ b/configure
+@@ -5650,12 +5650,9 @@ elif enabled mips; then
  
      # Enable minimum ISA based on selected options
      if enabled mips64; then
